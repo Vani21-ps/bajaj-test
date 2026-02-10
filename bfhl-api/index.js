@@ -10,26 +10,37 @@ app.use(cors());
 app.use(express.json());
 
 const aiResponse = async (question) => {
-  const response = await axios.post(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      contents: [
-        {
-          parts: [{ text: question }]
+  try {
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
+      {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: question }]
+          }
+        ]
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-goog-api-key": process.env.GEMINI_API_KEY
         }
-      ]
-    }
-  );
+      }
+    );
 
-  const text =
-    response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text =
+      response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-  if (!text) return "Unknown";
+    if (!text) return "Unknown";
 
-
-  return text.trim().split(/\s+/)[0];
+    return text.trim(); 
+  } catch (error) {
+    console.error("Gemini API Error ↓↓↓");
+    console.error(error.response?.data || error.message);
+    throw error;
+  }
 };
-
 
 
 
