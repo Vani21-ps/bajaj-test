@@ -32,9 +32,15 @@ const aiResponse = async (question) => {
     const text =
       response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    if (!text) return "Unknown";
+   if (!text) return "Unknown";
 
-    return text.trim().split(/\s+/)[0]; // extra safety
+return text
+  .replace(/[*_.]/g, "")
+  .trim()
+  .split(/\s+/)
+  .slice(-2)
+  .join(" ");
+
   } catch (error) {
     console.error("Gemini API Error ↓↓↓");
     console.error(error.response?.data || error.message);
