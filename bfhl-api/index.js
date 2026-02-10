@@ -17,7 +17,8 @@ const aiResponse = async (question) => {
         contents: [
           {
             role: "user",
-            parts: [{ text: question }]
+           parts: [{ text: `Answer in only ONE WORD. ${question}` }]
+
           }
         ]
       },
