@@ -17,8 +17,7 @@ const aiResponse = async (question) => {
         contents: [
           {
             role: "user",
-           parts: [{ text: `Answer in only ONE WORD. ${question}` }]
-
+            parts: [{ text: `Answer in only ONE WORD. ${question}` }]
           }
         ]
       },
@@ -35,13 +34,14 @@ const aiResponse = async (question) => {
 
     if (!text) return "Unknown";
 
-    return text.trim(); 
+    return text.trim().split(/\s+/)[0]; // extra safety
   } catch (error) {
     console.error("Gemini API Error ↓↓↓");
     console.error(error.response?.data || error.message);
     throw error;
   }
 };
+
 
 
 
